@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include "mainwindow.h"
+#include "application.h"
 #include <QDesktopWidget>
 
 /*
@@ -19,7 +20,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    Application a(argc, argv);
     MainWindow w;
     w.show();
     QHelper::centerAndResize(w, a, 600, 600);

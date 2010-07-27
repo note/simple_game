@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     newGamePanel = new NewGamePanel();
     createMenus();
     addEvents();
+
+    players[0] = new Player("Bob", 3, 0);
+    players[1] = new Player("Alice", 3, 0);
 }
 
 MainWindow::~MainWindow()

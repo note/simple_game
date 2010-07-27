@@ -13,7 +13,9 @@ HEADERS += mainwindow.h \
     two_dim.h \
     board.h \
     exceptions.h \
-    newgame.h
+    newgame.h \
+    player.h \
+    application.h
 FORMS += mainwindow.ui \
     newgame.ui
 OTHER_FILES += 
