@@ -5,7 +5,8 @@ TARGET = game
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
-    map.cpp
+    map.cpp \
+    board.cpp
 HEADERS += mainwindow.h \
     map.h \
     two_dim.h \
