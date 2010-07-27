@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include "map.h"
+#include "newgame.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -12,9 +13,10 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void paintEvent(QPaintEvent * event);
     bool event(QEvent *event);
     void createMenus();
+    void addEvents();
+    void drawMap(int rows, int columns, int victory);
 
 protected:
     void changeEvent(QEvent *e);
@@ -23,7 +25,12 @@ private:
     Ui::MainWindow *ui;
     Map * map;
     QMenu * newMenu;
-    QAction * newGame;
+    QAction *newGameAction, *restartAction;
+    NewGamePanel * newGamePanel;
+
+private slots:
+    void createGamePanel();
+    void restart();
 };
 
 #endif // MAINWINDOW_H

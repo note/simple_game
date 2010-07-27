@@ -3,9 +3,9 @@
 #include <QPaintEvent>
 #include <QMessageBox>
 
-Map::Map(QWidget * parent, int columns, int rows, int squareSize, int victory, int padding) :
+Map::Map(QWidget * parent, int columns, int rows, int victory, int squareSize, int padding) :
 QWidget(parent), board(columns, rows, victory), columns(columns), rows(rows), squareSize(squareSize), victory(victory), padding(padding){
-    resize((squareSize+padding*2)*squareSize, (squareSize+padding*2)*Map::rows);
+    QWidget::resize((squareSize+padding*2)*columns, (squareSize+padding*2)*rows);
     action = 1;
 }
 
@@ -33,7 +33,7 @@ void Map::paintEvent(QPaintEvent * event){
         QRect source(0, 0, 40, 40);
         QImage image(whose() == 1 ? ":red.png" : ":blue.png");
         painter.drawImage(target, image, source);
-        action = 0;
+        action = 1;
     }
 }
 
@@ -68,4 +68,21 @@ void Map::redraw(){
 
 short Map::whose(){
     return board.player;
+}
+
+void Map::restart(){
+    int ret = QMessageBox::AcceptRole;
+    if(board.winner() == 0){ //current game still lasts
+        QMessageBox box;
+        box.setText("Current game still lasts.");
+        box.setInformativeText("Do you want to restart?");
+        box.addButton("Yes", QMessageBox::AcceptRole);
+        box.addButton("No", QMessageBox::RejectRole);
+        ret = box.exec();
+    }
+    if(ret==QMessageBox::AcceptRole){
+        board.restart();
+        action = 1;
+        update();
+    }
 }

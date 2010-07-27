@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "newgame.h"
 #include <QPainter>
 #include <QMessageBox>
 
@@ -8,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    map = new Map(this);
-    map->move(30, 30);
+    map = new Map(this, 7, 7, 4);
+    map->move(20, 20);
+    newGamePanel = new NewGamePanel();
     createMenus();
+    addEvents();
 }
 
 MainWindow::~MainWindow()
@@ -30,13 +33,6 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
-void MainWindow::paintEvent(QPaintEvent * event){
-   // QPainter paint( this );
-
-   // QImage *img = new QImage(":red.png");
-   // paint.drawImage(0, 0, *img, 0, 0, -1, -1);
-}
-
 //that method is essential to prevent from disappearing Map after minimising window
 bool MainWindow::event(QEvent *event){
     if(event->type() == QEvent::WindowStateChange){
@@ -48,9 +44,35 @@ bool MainWindow::event(QEvent *event){
 }
 
 void MainWindow::createMenus(){
-    newMenu = new QMenu(tr("&New"), this);
+    newMenu = new QMenu(tr("&Game"), this);
     menuBar()->addMenu(newMenu);
-    newGame = new QAction(tr("Game"), this);
-    newGame->setShortcut(QKeySequence::New);
-    newMenu->addAction(newGame);
+    newGameAction = new QAction(tr("New game"), this);
+    newGameAction->setShortcut(QKeySequence::New);
+    restartAction = new QAction(tr("Restart"), this);
+    restartAction->setShortcut(Qt::CTRL + Qt::Key_R);
+    newMenu->addAction(newGameAction);
+    newMenu->addAction(restartAction);
+}
+
+void MainWindow::addEvents(){
+    connect(newGameAction, SIGNAL(triggered()), this, SLOT(createGamePanel()));
+    connect(restartAction, SIGNAL(triggered()), this, SLOT(restart()));
+}
+
+void MainWindow::createGamePanel(){
+    newGamePanel->move(x()+30, y()+30);
+    newGamePanel->show();
+}
+
+void MainWindow::drawMap(int rows, int columns, int victory){
+    if(map != 0){
+        delete map;
+    }
+    map = new Map(this, columns, rows, victory);
+    map->move(20, 20);
+    map->show();
+}
+
+void MainWindow::restart(){
+    map->restart();
 }

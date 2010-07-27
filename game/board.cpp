@@ -64,11 +64,7 @@ bool Board::isWinningDiagonal(int row, int column){
 }
 
 Board::Board(int columns, int rows, int victory) : TwoDim<short>(columns, rows), victory(victory){
-    for(int i=0; i<rows; i++)
-        for(int j=0; j<columns; j++)
-            (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
-    player = 1;
-    _winner = 0;
+    restart();
 }
 
 bool Board::isWinningMove(int row, int column){
@@ -97,4 +93,12 @@ int Board::move(int column) throw(IncorrectMove){
         return i;
     }else
         throw IncorrectMove();
+}
+
+void Board::restart(){
+    for(int i=0; i<rows; i++)
+        for(int j=0; j<columns; j++)
+            (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
+    player = 1;
+    _winner = 0;
 }

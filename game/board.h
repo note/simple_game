@@ -23,6 +23,8 @@ public:
     short winner(){
         return _winner;
     }
+
+    void restart();
 };
 
 #endif // BOARD_H
