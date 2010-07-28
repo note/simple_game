@@ -3,8 +3,8 @@
 Player::Player(short color, const QString & name, int minutes, int seconds){
     this->color = color;
     this->name = name;
-    timeLeft = minutes*60*1000 + seconds*1000;
-    elapsed = new QTime();
+    displayedTime = initialTime = timeLeft = minutes*60*1000 + seconds*1000;
+    elapsed = new QTime(0, 0, 0, 0);
     next = 0;
 }
 
@@ -23,14 +23,37 @@ void Player::showPanel(QLayout * layout, QWidget * parent){
 }
 
 QString Player::getMinutes(){
+    return getMinutes(timeLeft);
+}
+
+QString Player::getMinutes(int time){
     QString s;
-    s.setNum(minutes());
+    s.setNum(minutes(time));
     return s;
 }
 
 QString Player::getSeconds(){
+    return getSeconds(timeLeft);
+}
+
+QString Player::getSeconds(int time){
     QString s;
-    s.setNum(seconds());
-    s = (seconds()<10) ? "0"+s : s;
+    s.setNum(seconds(time));
+    s = (seconds(time)<10) ? "0"+s : s;
     return s;
+}
+
+void Player::update(){
+    update(displayedTime);
+}
+
+void Player::update(int time){
+    timeLabel->setText(getMinutes(time) + ":" + getSeconds(time));
+}
+
+void Player::restart(){
+    timeLeft = initialTime;
+    displayedTime = timeLeft;
+    update();
+    stop();
 }

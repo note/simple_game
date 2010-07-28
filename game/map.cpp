@@ -42,12 +42,8 @@ void Map::mousePressEvent(QMouseEvent *event){
     try{
         //make move
         int row = board.getRowForColumn(column);
-        if(row>=0){ //if row<0 then this column is full, nothing to do
-            action = 1;
-            QString e;
-            e.setNum(row);
-            QMessageBox::information(this, "End of game", "P " + e + " has won!");
-            action = 1;
+        if(row>=0){ //otherwise row<0, then this column is full, nothing to do
+            board.stop();
             board.move(row, column);
             QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
             action = 2;
@@ -59,7 +55,8 @@ void Map::mousePressEvent(QMouseEvent *event){
                 action = 1;
                 QMessageBox::information(this, "End of game", "Player number " + s + " has won!");
                 action = 1;
-            }
+            }else
+                board.start();
         }
     }catch(IncorrectMove &e){
         QMessageBox::information(this, "Error", "Icorrect move");

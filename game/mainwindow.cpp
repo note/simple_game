@@ -85,7 +85,7 @@ void MainWindow::drawMap(int rows, int columns, int victory){
     map = new Map(this, columns, rows, victory);
     map->move(20, 20);
     map->show();
-
+    map->board.start();
    // ui->
 }
 

@@ -28,6 +28,10 @@ public:
         return _winner;
     }
 
+    void stop();
+
+    void start();
+
     void addPlayer(Player * player);
 
     void restart();

@@ -104,6 +104,14 @@ void Board::restart(){
             (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
     player = headPlayer;
     _winner = 0;
+    Player * tmp = headPlayer;
+    if(tmp){
+        do{
+            tmp->restart();
+            tmp = tmp->next;
+        }while(tmp && tmp != headPlayer);
+         headPlayer->start();
+     }
 }
 
 void Board::addPlayer(Player *player){
@@ -116,4 +124,12 @@ void Board::addPlayer(Player *player){
         tmp->next = player;
         player->next = headPlayer;
     }
+}
+
+void Board::stop(){
+    player->stop();
+}
+
+void Board::start(){
+    player->start();
 }

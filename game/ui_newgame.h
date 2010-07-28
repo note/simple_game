@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newgame.ui'
 **
-** Created: Wed 28. Jul 09:53:40 2010
+** Created: Wed 28. Jul 12:52:27 2010
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -158,45 +158,65 @@ public:
         spinBox = new QSpinBox(gridLayoutWidget);
         spinBox->setObjectName(QString::fromUtf8("spinBox"));
         spinBox->setEnabled(true);
+        spinBox->setMaximum(59);
+        spinBox->setValue(2);
 
         gridLayout->addWidget(spinBox, 0, 4, 1, 1);
 
         spinBox_2 = new QSpinBox(gridLayoutWidget);
         spinBox_2->setObjectName(QString::fromUtf8("spinBox_2"));
+        spinBox_2->setMaximum(59);
+        spinBox_2->setValue(2);
 
         gridLayout->addWidget(spinBox_2, 1, 4, 1, 1);
 
         spinBox_3 = new QSpinBox(gridLayoutWidget);
         spinBox_3->setObjectName(QString::fromUtf8("spinBox_3"));
         spinBox_3->setEnabled(false);
+        spinBox_3->setMaximum(59);
+        spinBox_3->setValue(2);
 
         gridLayout->addWidget(spinBox_3, 2, 4, 1, 1);
 
         spinBox_4 = new QSpinBox(gridLayoutWidget);
         spinBox_4->setObjectName(QString::fromUtf8("spinBox_4"));
         spinBox_4->setEnabled(false);
+        spinBox_4->setMaximum(59);
+        spinBox_4->setValue(2);
 
         gridLayout->addWidget(spinBox_4, 3, 4, 1, 1);
 
         spinBox_5 = new QSpinBox(gridLayoutWidget);
         spinBox_5->setObjectName(QString::fromUtf8("spinBox_5"));
+        spinBox_5->setMinimum(0);
+        spinBox_5->setMaximum(50);
+        spinBox_5->setSingleStep(10);
+        spinBox_5->setValue(0);
 
         gridLayout->addWidget(spinBox_5, 0, 6, 1, 1);
 
         spinBox_6 = new QSpinBox(gridLayoutWidget);
         spinBox_6->setObjectName(QString::fromUtf8("spinBox_6"));
+        spinBox_6->setMinimum(0);
+        spinBox_6->setMaximum(59);
+        spinBox_6->setSingleStep(10);
+        spinBox_6->setValue(0);
 
         gridLayout->addWidget(spinBox_6, 1, 6, 1, 1);
 
         spinBox_7 = new QSpinBox(gridLayoutWidget);
         spinBox_7->setObjectName(QString::fromUtf8("spinBox_7"));
         spinBox_7->setEnabled(false);
+        spinBox_7->setMaximum(50);
+        spinBox_7->setSingleStep(10);
 
         gridLayout->addWidget(spinBox_7, 2, 6, 1, 1);
 
         spinBox_8 = new QSpinBox(gridLayoutWidget);
         spinBox_8->setObjectName(QString::fromUtf8("spinBox_8"));
         spinBox_8->setEnabled(false);
+        spinBox_8->setMaximum(50);
+        spinBox_8->setSingleStep(10);
 
         gridLayout->addWidget(spinBox_8, 3, 6, 1, 1);
 
