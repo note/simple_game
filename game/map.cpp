@@ -31,7 +31,7 @@ void Map::paintEvent(QPaintEvent * event){
     if((action >> 1) & 1){ //draw new piece
         QRect target(event->rect());
         QRect source(0, 0, 40, 40);
-        QImage image(whose() == 1 ? ":red.png" : ":blue.png");
+        QImage image(whoseMove()->color == 1 ? ":red.png" : ":blue.png");
         painter.drawImage(target, image, source);
         action = 1;
     }
@@ -41,18 +41,25 @@ void Map::mousePressEvent(QMouseEvent *event){
     int column = event->x() / (squareSize+2*padding);
     try{
         //make move
-        int row = board.move(column);
-        QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
-        action = 2;
-        update(rect);
-        if(board.winner()){ //if game has ended
-            QString s;
-            s.setNum(board.winner());
+        int row = board.getRowForColumn(column);
+        if(row>=0){ //if row<0 then this column is full, nothing to do
+            action = 1;
+            QString e;
+            e.setNum(row);
+            QMessageBox::information(this, "End of game", "P " + e + " has won!");
+            action = 1;
+            board.move(row, column);
+            QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
+            action = 2;
+            update(rect);
+            if(board.winner()){ //if game has ended
+                QString s = board.winner()->name;
 
-            //MessageBox::information forces some updates, that strange repetition makes it all works
-            action = 1;
-            QMessageBox::information(this, "End of game", "Player number" + s + " has won!");
-            action = 1;
+                //MessageBox::information forces some updates, that strange repetition makes it all works
+                action = 1;
+                QMessageBox::information(this, "End of game", "Player number " + s + " has won!");
+                action = 1;
+            }
         }
     }catch(IncorrectMove &e){
         QMessageBox::information(this, "Error", "Icorrect move");
@@ -64,10 +71,6 @@ void Map::mousePressEvent(QMouseEvent *event){
 void Map::redraw(){
     action = 1;
     update();
-}
-
-short Map::whose(){
-    return board.player;
 }
 
 void Map::restart(){
@@ -85,4 +88,8 @@ void Map::restart(){
         action = 1;
         update();
     }
+}
+
+Player * Map::whoseMove(){
+    return board.player;
 }

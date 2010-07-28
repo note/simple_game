@@ -7,7 +7,8 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     map.cpp \
     board.cpp \
-    newgame.cpp
+    newgame.cpp \
+    player.cpp
 HEADERS += mainwindow.h \
     map.h \
     two_dim.h \

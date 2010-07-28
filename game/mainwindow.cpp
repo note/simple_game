@@ -3,6 +3,7 @@
 #include "newgame.h"
 #include <QPainter>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,16 +12,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     map = new Map(this, 7, 7, 4);
     map->move(20, 20);
-    newGamePanel = new NewGamePanel();
+    newGamePanel = new NewGamePanel(this);
     createMenus();
     addEvents();
+    //TODO:
+    //players[0] = new Player("Bob", 3, 0);
+   // players[1] = new Player("Alice", 3, 0);
+   // players[2] = 0;
+   // players[3] = 0;
 
-    players[0] = new Player("Bob", 3, 0);
-    players[1] = new Player("Alice", 3, 0);
+    playersPanel = new QWidget(this);
+    playersLayout = new QVBoxLayout();
+    playersPanel->move(500, 200);
+    playersPanel->setLayout(playersLayout);
+    /*QString qs;
+    players[0]->setLayout();*/
 }
 
 MainWindow::~MainWindow()
 {
+    //TODO:
     delete ui;
 }
 
@@ -74,8 +85,23 @@ void MainWindow::drawMap(int rows, int columns, int victory){
     map = new Map(this, columns, rows, victory);
     map->move(20, 20);
     map->show();
+
+   // ui->
 }
 
 void MainWindow::restart(){
     map->restart();
+}
+
+void MainWindow::addPlayer(short colorId, const QString &name, int minutes, int seconds){
+    //(players[id] != 0)
+       // delete players[id];
+    QMessageBox::information(this, "a", "AFDG");
+    Player * player = new Player(colorId, name, minutes, seconds);
+    map->board.addPlayer(player);
+   // QVBoxLayout * layout = new QVBoxLayout(this); //TODO: who will destroy it
+  //  playersLayout->addLayout(layout);
+    player->showPanel(playersLayout, playersPanel);
+    playersPanel->resize(300, 300);
+    playersPanel->show();
 }

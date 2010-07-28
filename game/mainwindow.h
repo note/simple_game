@@ -3,6 +3,7 @@
 #include "map.h"
 #include "newgame.h"
 #include <QMainWindow>
+#include <QVBoxLayout>
 #include "player.h"
 
 namespace Ui {
@@ -19,6 +20,7 @@ public:
     void createMenus();
     void addEvents();
     void drawMap(int rows, int columns, int victory);
+    void addPlayer(short id, const QString & name, int minutes, int seconds);
 
 protected:
     void changeEvent(QEvent *e);
@@ -30,6 +32,8 @@ private:
     QAction *newGameAction, *restartAction;
     NewGamePanel * newGamePanel;
     Player * players[Application::maxPlayers];
+    QWidget * playersPanel;
+    QVBoxLayout * playersLayout;
 
 private slots:
     void createGamePanel();

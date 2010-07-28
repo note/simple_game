@@ -1,6 +1,6 @@
 #include "board.h"
 
-bool Board::isWinningRow(int row, int column){
+bool Board::isWinningRow(int row, int column) const{
     int res = 1, i=column-1;
     while(res<victory && i>=0)
         if((*this)[row][i] == (*this)[row][column])
@@ -16,7 +16,7 @@ bool Board::isWinningRow(int row, int column){
     return res == victory;
 }
 
-bool Board::isWinningColumn(int row, int column){
+bool Board::isWinningColumn(int row, int column) const{
     int res=1, i=row+1; //there's no point in going up (in this case up means from greater to smaller index) because [row][column] is last added piece so no piece can be above that
     while(res<victory && i<rows)
         if((*this)[i][column] == (*this)[row][column])
@@ -26,7 +26,7 @@ bool Board::isWinningColumn(int row, int column){
     return res == victory;
 }
 
-bool Board::isWinningDiagonal(int row, int column){
+bool Board::isWinningDiagonal(int row, int column) const{
     //diagonal from top-left to bottom-right
     int res=1, i=row-1, j=column-1;
     //top-left direction
@@ -67,7 +67,7 @@ Board::Board(int columns, int rows, int victory) : TwoDim<short>(columns, rows),
     restart();
 }
 
-bool Board::isWinningMove(int row, int column){
+bool Board::isWinningMove(int row, int column) const{
     if(isWinningRow(row, column))
         return true;
     if(isWinningColumn(row, column))
@@ -78,27 +78,42 @@ bool Board::isWinningMove(int row, int column){
     return false;
 }
 
-//return row occupied by added piece
-int Board::move(int column) throw(IncorrectMove){
-    if(!_winner){
-        int i=rows-1;
-        for(; i>=0; i--)
-            if((*this)[i][column]==0){
-                (*this)[i][column] = player; //todo: out of range, end of game
-                break;
-            }
+//get first empty row in given column
+int Board::getRowForColumn(int column){
+    int i=rows-1;
+    for(; i>=0; i--)
+        if((*this)[i][column]==0){ //if empty
+            break;
+        }
+    return i;
+}
 
-        _winner = (isWinningMove(i, column)) ? player : 0;
-        player = (player==2) ? 1 : 2;
-        return i;
+//return row occupied by added piece
+void Board::move(int row, int column) throw(IncorrectMove){
+    if(!_winner){
+        (*this)[row][column] = player->color; //todo: out of range, end of game
+        _winner = (isWinningMove(row, column)) ? player : 0;
+        player = player->next;
     }else
         throw IncorrectMove();
 }
-
+//TODO: restart players
 void Board::restart(){
     for(int i=0; i<rows; i++)
         for(int j=0; j<columns; j++)
             (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
-    player = 1;
+    player = headPlayer;
     _winner = 0;
+}
+
+void Board::addPlayer(Player *player){
+    if(!headPlayer)
+        headPlayer = player;
+    else{
+        Player * tmp = headPlayer;
+        while(tmp->next)
+            tmp = tmp->next;
+        tmp->next = player;
+        player->next = headPlayer;
+    }
 }

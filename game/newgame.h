@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QDialog>
+#include <QMessageBox>
+#include <QSignalMapper>
 
 namespace Ui {
     class NewGamePanel;
@@ -14,15 +16,18 @@ public:
     NewGamePanel(QWidget *parent = 0);
     ~NewGamePanel();
 
-protected:
-    void changeEvent(QEvent *e);
-
 private:
     Ui::NewGamePanel *ui;
-    void createNewGame(int rows, int columns, int victory);
+    void setEnabledRow(bool enabled, int row);
+    bool handleForm();
+    void createNewGame();
+
+    QSignalMapper * signalMapper;
 
 private slots:
+    //called after new game form was submitted
     void on_pushButton_clicked();
+    void checkBoxChanged(int n);
 };
 
 #endif // NEWGAME_H

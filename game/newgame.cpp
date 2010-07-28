@@ -2,10 +2,17 @@
 #include "ui_newgame.h"
 #include "map.h"
 #include "mainwindow.h"
+#include <QSignalMapper>
 
 NewGamePanel::NewGamePanel(QWidget * parent) : QDialog(parent), ui(new Ui::NewGamePanel)
 {
     ui->setupUi(this);
+    signalMapper = new QSignalMapper(this);
+    for(int i=0; i<Application::maxPlayers; i++){
+        signalMapper->setMapping(ui->gridLayout->itemAtPosition(i, 0)->widget(), i);
+        connect(ui->gridLayout->itemAtPosition(i, 0)->widget(), SIGNAL(stateChanged(int)), signalMapper, SLOT(map()));
+    }
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(checkBoxChanged(int)));
 }
 
 NewGamePanel::~NewGamePanel()
@@ -13,26 +20,39 @@ NewGamePanel::~NewGamePanel()
     delete ui;
 }
 
-void NewGamePanel::changeEvent(QEvent *e)
-{
-    //dunno if it's neccessary
-   /* QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }*/
+bool NewGamePanel::handleForm(){
+    return true; //TODO
 }
 
-void NewGamePanel::createNewGame(int rows, int columns, int victory){
-    qobject_cast<MainWindow *>(parentWidget())->drawMap(rows, columns, victory);
+void NewGamePanel::createNewGame(){
+    MainWindow * mainWindow = qobject_cast<MainWindow *>(parentWidget());
+    for(int i=0; i<Application::maxPlayers; i++){
+        if(qobject_cast<QCheckBox *>(ui->gridLayout->itemAtPosition(i, 0)->widget())->isChecked())
+            mainWindow->addPlayer(i+1, qobject_cast<QLineEdit *>(ui->gridLayout->itemAtPosition(i, 2)->widget())->text(),
+                                 qobject_cast<QSpinBox *>(ui->gridLayout->itemAtPosition(i, 4)->widget())->value(),
+                                 qobject_cast<QSpinBox *>(ui->gridLayout->itemAtPosition(i, 6)->widget())->value());
+    }
+    mainWindow->drawMap(ui->rowsInput->value(), ui->columnsInput->value(), ui->victoryInput->value());
+    hide();
 }
 
+//called after new game form was submitted
 void NewGamePanel::on_pushButton_clicked()
 {
     //TODO: validation
-    createNewGame(ui->rowsInput->value(), ui->columnsInput->value(), ui->victoryInput->value());
-    hide();
+    if(handleForm())
+        createNewGame();
+}
+
+//called when checkbox for player was clicked
+void NewGamePanel::checkBoxChanged(int row){
+    if(qobject_cast<QCheckBox *>(ui->gridLayout->itemAtPosition(row, 0)->widget())->isChecked())
+        setEnabledRow(true, row);
+    else
+        setEnabledRow(false, row);
+}
+
+void NewGamePanel::setEnabledRow(bool enabled, int row){
+    for(int i=2; i<7; i++)
+        ui->gridLayout->itemAtPosition(row, i)->widget()->setEnabled(enabled);
 }
