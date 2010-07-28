@@ -28,13 +28,16 @@ public:
         return _winner;
     }
 
-    void stop();
+    void playerStop();
 
+    void playerStart();
     void start();
 
     void addPlayer(Player * player);
 
     void restart();
+
+    void deletePlayers();
 };
 
 #endif // BOARD_H

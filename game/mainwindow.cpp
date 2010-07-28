@@ -15,18 +15,14 @@ MainWindow::MainWindow(QWidget *parent) :
     newGamePanel = new NewGamePanel(this);
     createMenus();
     addEvents();
-    //TODO:
-    //players[0] = new Player("Bob", 3, 0);
-   // players[1] = new Player("Alice", 3, 0);
-   // players[2] = 0;
-   // players[3] = 0;
-
+    createNewGame(7, 7, 4);
     playersPanel = new QWidget(this);
     playersLayout = new QVBoxLayout();
     playersPanel->move(500, 200);
     playersPanel->setLayout(playersLayout);
-    /*QString qs;
-    players[0]->setLayout();*/
+    addPlayer(1, "Peter", 3, 20);
+    addPlayer(2, "Eric", 3, 0);
+    start();
 }
 
 MainWindow::~MainWindow()
@@ -85,10 +81,9 @@ void MainWindow::drawMap(int rows, int columns, int victory){
     map = new Map(this, columns, rows, victory);
     map->move(20, 20);
     map->show();
-    map->board.start();
-   // ui->
 }
 
+//it's first function called after emiting restart signal (eg. hitting ctrl+R)
 void MainWindow::restart(){
     map->restart();
 }
@@ -104,4 +99,13 @@ void MainWindow::addPlayer(short colorId, const QString &name, int minutes, int 
     player->showPanel(playersLayout, playersPanel);
     playersPanel->resize(300, 300);
     playersPanel->show();
+}
+
+void MainWindow::createNewGame(int rows, int columns, int victory){
+     map->board.deletePlayers();
+     drawMap(rows, columns, victory);
+}
+
+void MainWindow::start(){
+    map->board.start();
 }

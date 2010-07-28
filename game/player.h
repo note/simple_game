@@ -9,7 +9,8 @@ class Player : QObject{
     Q_OBJECT
     QTime * elapsed;
     QLayout * layout;
-    int timeLeft, displayedTime, initialTime; //initialTime useful when restarting game
+    int timeLeft, displayedTime;
+    const int initialTime; //initialTime useful when restarting game
     QLabel * nameLabel;
     QLabel * timeLabel;
     QBasicTimer timer;

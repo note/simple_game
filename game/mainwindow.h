@@ -19,8 +19,9 @@ public:
     bool event(QEvent *event);
     void createMenus();
     void addEvents();
-    void drawMap(int rows, int columns, int victory);
     void addPlayer(short id, const QString & name, int minutes, int seconds);
+    void createNewGame(int rows, int columns, int victory);
+    void start();
 
 protected:
     void changeEvent(QEvent *e);
@@ -34,6 +35,8 @@ private:
     Player * players[Application::maxPlayers];
     QWidget * playersPanel;
     QVBoxLayout * playersLayout;
+
+    void drawMap(int rows, int columns, int victory);
 
 private slots:
     void createGamePanel();

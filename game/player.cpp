@@ -1,9 +1,10 @@
 #include "player.h"
 
-Player::Player(short color, const QString & name, int minutes, int seconds){
+Player::Player(short color, const QString & name, int minutes, int seconds) : initialTime(minutes*60*1000 + seconds*1000){
     this->color = color;
     this->name = name;
-    displayedTime = initialTime = timeLeft = minutes*60*1000 + seconds*1000;
+    displayedTime = initialTime;
+    timeLeft = initialTime;
     elapsed = new QTime(0, 0, 0, 0);
     next = 0;
 }
@@ -52,8 +53,8 @@ void Player::update(int time){
 }
 
 void Player::restart(){
-    timeLeft = initialTime;
-    displayedTime = timeLeft;
-    update();
     stop();
+    timeLeft = initialTime;
+    displayedTime = initialTime;
+    update(initialTime);
 }

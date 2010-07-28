@@ -102,15 +102,13 @@ void Board::restart(){
     for(int i=0; i<rows; i++)
         for(int j=0; j<columns; j++)
             (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
-    player = headPlayer;
-    _winner = 0;
+   // start();
     Player * tmp = headPlayer;
     if(tmp){
         do{
             tmp->restart();
             tmp = tmp->next;
         }while(tmp && tmp != headPlayer);
-         headPlayer->start();
      }
 }
 
@@ -126,10 +124,28 @@ void Board::addPlayer(Player *player){
     }
 }
 
-void Board::stop(){
+void Board::playerStop(){
     player->stop();
 }
 
-void Board::start(){
+void Board::playerStart(){
     player->start();
+}
+
+void Board::start(){
+    player = headPlayer;
+    _winner = 0;
+    playerStart();
+}
+
+void Board::deletePlayers(){
+    Player *toDel = 0, *it=headPlayer;
+    if(it){
+        while(it->next){
+            toDel = it;
+            it = toDel->next;
+            delete toDel;
+        }
+        delete it;
+    }
 }

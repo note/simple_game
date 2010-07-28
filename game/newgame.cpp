@@ -26,14 +26,17 @@ bool NewGamePanel::handleForm(){
 
 void NewGamePanel::createNewGame(){
     MainWindow * mainWindow = qobject_cast<MainWindow *>(parentWidget());
+   // mainWindow->deletePlayers();
+    //mainWindow->drawMap(ui->rowsInput->value(), ui->columnsInput->value(), ui->victoryInput->value());
+    mainWindow->createNewGame(ui->rowsInput->value(), ui->columnsInput->value(), ui->victoryInput->value());
     for(int i=0; i<Application::maxPlayers; i++){
         if(qobject_cast<QCheckBox *>(ui->gridLayout->itemAtPosition(i, 0)->widget())->isChecked())
             mainWindow->addPlayer(i+1, qobject_cast<QLineEdit *>(ui->gridLayout->itemAtPosition(i, 2)->widget())->text(),
                                  qobject_cast<QSpinBox *>(ui->gridLayout->itemAtPosition(i, 4)->widget())->value(),
                                  qobject_cast<QSpinBox *>(ui->gridLayout->itemAtPosition(i, 6)->widget())->value());
     }
-    mainWindow->drawMap(ui->rowsInput->value(), ui->columnsInput->value(), ui->victoryInput->value());
     hide();
+    mainWindow->start();
 }
 
 //called after new game form was submitted
