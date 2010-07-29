@@ -8,12 +8,12 @@
 class Player : QObject{
     Q_OBJECT
     QTime * elapsed;
-    QLayout * layout;
     int timeLeft, displayedTime;
     const int initialTime; //initialTime useful when restarting game
     QLabel * nameLabel;
     QLabel * timeLabel;
     QBasicTimer timer;
+
 public:
     //This class is very simple and I predict that no extra actions would be performed in accessors so it's more convenient to make all those properties public
     short color;
@@ -67,6 +67,12 @@ public:
     void activate(bool active){
 
     }
+
+    void deletePanel(){
+        delete nameLabel;
+        delete timeLabel;
+    }
+
 protected:
     void timerEvent(QTimerEvent * event){
         displayedTime -= 1000;

@@ -139,13 +139,15 @@ void Board::start(){
 }
 
 void Board::deletePlayers(){
-    Player *toDel = 0, *it=headPlayer;
+    Player *toDel = 0, *it=headPlayer, *head=headPlayer;
     if(it){
-        while(it->next){
+        while(it->next != head){ //last player attribute next points to headPlayer. Since it might has been already deleted we need temporary pointer head
             toDel = it;
             it = toDel->next;
+            toDel->deletePanel();
             delete toDel;
         }
+        it->deletePanel();
         delete it;
     }
 }

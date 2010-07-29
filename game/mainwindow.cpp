@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     playersPanel->setLayout(playersLayout);
     addPlayer(1, "Peter", 3, 20);
     addPlayer(2, "Eric", 3, 0);
+    showPlayersPanel();
     start();
 }
 
@@ -78,6 +79,7 @@ void MainWindow::drawMap(int rows, int columns, int victory){
     if(map != 0){
         delete map;
     }
+    QMessageBox::information(this, "a", "drawMap");
     map = new Map(this, columns, rows, victory);
     map->move(20, 20);
     map->show();
@@ -89,16 +91,9 @@ void MainWindow::restart(){
 }
 
 void MainWindow::addPlayer(short colorId, const QString &name, int minutes, int seconds){
-    //(players[id] != 0)
-       // delete players[id];
-    QMessageBox::information(this, "a", "AFDG");
     Player * player = new Player(colorId, name, minutes, seconds);
     map->board.addPlayer(player);
-   // QVBoxLayout * layout = new QVBoxLayout(this); //TODO: who will destroy it
-  //  playersLayout->addLayout(layout);
     player->showPanel(playersLayout, playersPanel);
-    playersPanel->resize(300, 300);
-    playersPanel->show();
 }
 
 void MainWindow::createNewGame(int rows, int columns, int victory){
@@ -108,4 +103,9 @@ void MainWindow::createNewGame(int rows, int columns, int victory){
 
 void MainWindow::start(){
     map->board.start();
+}
+
+void MainWindow::showPlayersPanel(){
+    playersPanel->resize(300, 300);
+    playersPanel->show();
 }

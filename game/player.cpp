@@ -1,4 +1,5 @@
 #include "player.h"
+#include <QMessageBox>
 
 Player::Player(short color, const QString & name, int minutes, int seconds) : initialTime(minutes*60*1000 + seconds*1000){
     this->color = color;
@@ -49,7 +50,10 @@ void Player::update(){
 }
 
 void Player::update(int time){
-    timeLabel->setText(getMinutes(time) + ":" + getSeconds(time));
+    if(time>0)
+        timeLabel->setText(getMinutes(time) + ":" + getSeconds(time));
+    else
+        QMessageBox::information(timeLabel, "koniec", "koniec");
 }
 
 void Player::restart(){

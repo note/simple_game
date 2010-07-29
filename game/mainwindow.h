@@ -22,6 +22,7 @@ public:
     void addPlayer(short id, const QString & name, int minutes, int seconds);
     void createNewGame(int rows, int columns, int victory);
     void start();
+    void showPlayersPanel();
 
 protected:
     void changeEvent(QEvent *e);
