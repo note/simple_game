@@ -17,6 +17,9 @@ public:
     Player * player; //whose turn is now
 
     Board(int columns, int rows, int victory);
+  //  ~Board(){
+      //  deletePlayers();
+ //   }
 
     bool isWinningMove(int row, int column) const;
 
@@ -35,9 +38,10 @@ public:
 
     void addPlayer(Player * player);
 
-    void restart();
+    void reset();
 
     void deletePlayers();
+    void setTurnOnNextActive();
 };
 
 #endif // BOARD_H

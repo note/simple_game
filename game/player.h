@@ -13,6 +13,7 @@ class Player : QObject{
     QLabel * nameLabel;
     QLabel * timeLabel;
     QBasicTimer timer;
+    bool active; //if it's true then player still plays, otherwise he's already lost
 
 public:
     //This class is very simple and I predict that no extra actions would be performed in accessors so it's more convenient to make all those properties public
@@ -21,6 +22,10 @@ public:
     Player * next;
 
     Player(short color, const QString & name, int minutes, int seconds);
+    ~Player(){
+        delete nameLabel;
+        delete timeLabel;
+    }
 
     //return value in range 0 to 59
     int minutes(){
@@ -68,9 +73,8 @@ public:
 
     }
 
-    void deletePanel(){
-        delete nameLabel;
-        delete timeLabel;
+    bool isActive(){
+        return active;
     }
 
 protected:

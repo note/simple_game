@@ -3,5 +3,6 @@
 
 class OutOfRange{};
 class IncorrectMove{};
+class IncorrectMethodUse{};
 
 #endif // EXCEPTIONS_H

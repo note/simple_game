@@ -1,6 +1,8 @@
-<!DOCTYPE RCC><RCC version="1.0">
- <qresource>
-     <file alias="red.png">images/red.png</file>
-     <file alias="blue.png">images/blue.png</file>
- </qresource>
- </RCC>
+<RCC>
+    <qresource prefix="/">
+        <file alias="2.png">images/red.png</file>
+        <file alias="1.png">images/blue.png</file>
+        <file alias="4.png">images/green.png</file>
+        <file alias="3.png">images/yellow.png</file>
+    </qresource>
+</RCC>

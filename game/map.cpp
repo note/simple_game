@@ -11,7 +11,7 @@ QWidget(parent), board(columns, rows, victory), columns(columns), rows(rows), sq
 
 void Map::paintEvent(QPaintEvent * event){
     QPainter painter(this);
-    if(action & 1){ //draw board
+    if(action & 1){ //drawing/redrawing board
         QColor color(0, 0, 0);
         painter.setBrush(color);
         painter.setPen(color);
@@ -23,7 +23,9 @@ void Map::paintEvent(QPaintEvent * event){
                     painter.drawEllipse(rect);
                 else{
                     QRect source(0, 0, 40, 40);
-                    QImage image(board[j][i] == 1 ? ":blue.png" : ":red.png");
+                    QString whichFile;
+                    whichFile.setNum(board[j][i]);
+                    QImage image(":"+whichFile+".png");
                     painter.drawImage(rect, image, source);
                 }
             }
@@ -31,7 +33,9 @@ void Map::paintEvent(QPaintEvent * event){
     if((action >> 1) & 1){ //draw new piece
         QRect target(event->rect());
         QRect source(0, 0, 40, 40);
-        QImage image(whoseMove()->color == 1 ? ":red.png" : ":blue.png");
+        QString whichFile;
+        whichFile.setNum((whoseMove()->color));
+        QImage image(":"+whichFile+".png");
         painter.drawImage(target, image, source);
         action = 1;
     }
@@ -47,7 +51,8 @@ void Map::mousePressEvent(QMouseEvent *event){
             board.move(row, column);
             QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
             action = 2;
-            update(rect);
+            repaint(rect); //important!! it can't be update cause update doesn't call paintEvent immediately
+            board.setTurnOnNextActive();
             if(board.winner()){ //if game has ended
                 QString s = board.winner()->name;
 
@@ -80,8 +85,8 @@ void Map::restart(){
         box.addButton("No", QMessageBox::RejectRole);
         ret = box.exec();
     }
-    if(ret==QMessageBox::AcceptRole){
-        board.restart();
+    if(ret==QMessageBox::AcceptRole){ //if confirmation was accepted
+        board.reset();
         action = 1;
         update();
         board.start();

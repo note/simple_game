@@ -8,6 +8,7 @@ Player::Player(short color, const QString & name, int minutes, int seconds) : in
     timeLeft = initialTime;
     elapsed = new QTime(0, 0, 0, 0);
     next = 0;
+    active = true;
 }
 
 void Player::showPanel(QLayout * layout, QWidget * parent){

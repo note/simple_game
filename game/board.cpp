@@ -1,4 +1,5 @@
 #include "board.h"
+#include <QMessageBox>
 
 bool Board::isWinningRow(int row, int column) const{
     int res = 1, i=column-1;
@@ -64,7 +65,9 @@ bool Board::isWinningDiagonal(int row, int column) const{
 }
 
 Board::Board(int columns, int rows, int victory) : TwoDim<short>(columns, rows), victory(victory){
-    restart();
+   // QMessageBox::information(this, "koniec", "BOARD()");
+    headPlayer = 0;
+    reset();
 }
 
 bool Board::isWinningMove(int row, int column) const{
@@ -93,12 +96,11 @@ void Board::move(int row, int column) throw(IncorrectMove){
     if(!_winner){
         (*this)[row][column] = player->color; //todo: out of range, end of game
         _winner = (isWinningMove(row, column)) ? player : 0;
-        player = player->next;
     }else
         throw IncorrectMove();
 }
-//TODO: restart players
-void Board::restart(){
+
+void Board::reset(){
     for(int i=0; i<rows; i++)
         for(int j=0; j<columns; j++)
             (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
@@ -113,11 +115,12 @@ void Board::restart(){
 }
 
 void Board::addPlayer(Player *player){
-    if(!headPlayer)
+    if(!headPlayer){
         headPlayer = player;
-    else{
+        headPlayer->next = player; //it's closed list
+    }else{
         Player * tmp = headPlayer;
-        while(tmp->next)
+        while(tmp->next != headPlayer)
             tmp = tmp->next;
         tmp->next = player;
         player->next = headPlayer;
@@ -141,13 +144,27 @@ void Board::start(){
 void Board::deletePlayers(){
     Player *toDel = 0, *it=headPlayer, *head=headPlayer;
     if(it){
-        while(it->next != head){ //last player attribute next points to headPlayer. Since it might has been already deleted we need temporary pointer head
+        while((it->next) && it->next != head){ //last player attribute next points to headPlayer. Since it might has been already deleted we need temporary pointer head
             toDel = it;
             it = toDel->next;
-            toDel->deletePanel();
             delete toDel;
+            toDel = 0;
         }
-        it->deletePanel();
         delete it;
+        it = 0;
     }
+}
+
+//important! it must be at least one active player
+void Board::setTurnOnNextActive(){
+    Player * start = player;
+    if(!player)
+        throw IncorrectMethodUse();
+    Player * it = player->next;
+    while(!it->isActive() && it!=start)
+        it = it->next;
+    if(it->isActive())
+        player = it;
+    else
+        throw IncorrectMethodUse();
 }

@@ -12,7 +12,7 @@ class TwoDim{
         this->columns = columns;
         this->rows = rows;
     }
-    ~TwoDim(){
+    virtual ~TwoDim(){
         delete []ptr;
     }
     T * operator [] (int i) const throw(OutOfRange){
