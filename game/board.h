@@ -17,9 +17,9 @@ public:
     Player * player; //whose turn is now
 
     Board(int columns, int rows, int victory);
-  //  ~Board(){
-      //  deletePlayers();
- //   }
+    ~Board(){
+        deletePlayers();
+    }
 
     bool isWinningMove(int row, int column) const;
 

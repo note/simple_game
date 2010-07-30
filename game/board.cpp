@@ -157,14 +157,11 @@ void Board::deletePlayers(){
 
 //important! it must be at least one active player
 void Board::setTurnOnNextActive(){
-    Player * start = player;
     if(!player)
         throw IncorrectMethodUse();
-    Player * it = player->next;
-    while(!it->isActive() && it!=start)
-        it = it->next;
-    if(it->isActive())
-        player = it;
-    else
-        throw IncorrectMethodUse();
+    Player * next = player->getNextActive();
+    if(next == player) //it means that player is the winner
+        _winner = next;
+
+    player = next;
 }

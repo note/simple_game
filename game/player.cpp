@@ -1,5 +1,6 @@
 #include "player.h"
 #include <QMessageBox>
+#include "exceptions.h"
 
 Player::Player(short color, const QString & name, int minutes, int seconds) : initialTime(minutes*60*1000 + seconds*1000){
     this->color = color;
@@ -9,6 +10,14 @@ Player::Player(short color, const QString & name, int minutes, int seconds) : in
     elapsed = new QTime(0, 0, 0, 0);
     next = 0;
     active = true;
+}
+
+Player::~Player(){
+    if(nameLabel) //else deleting was disable (cause it has been deleted before by parent widget)
+        delete nameLabel;
+    if(timeLabel) //else deleting was disable (cause it has been deleted before by parent widget)
+        delete timeLabel;
+    delete elapsed;
 }
 
 void Player::showPanel(QLayout * layout, QWidget * parent){
@@ -57,9 +66,26 @@ void Player::update(int time){
         QMessageBox::information(timeLabel, "koniec", "koniec");
 }
 
+void Player::stop(){
+    timer.stop();
+    timeLeft -= elapsed->elapsed();
+    displayedTime = timeLeft;
+    update();
+}
+
 void Player::restart(){
     stop();
     timeLeft = initialTime;
     displayedTime = initialTime;
     update(initialTime);
+}
+
+Player * Player::getNextActive(){
+    Player * it = next;
+    while(!it->isActive() && it!=this)
+        it = it->next;
+    if(it->isActive())
+        return it;
+    else //it == this and !this->isActive()
+        throw IncorrectMethodUse();
 }

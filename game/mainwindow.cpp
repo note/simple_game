@@ -79,8 +79,6 @@ void MainWindow::drawMap(int rows, int columns, int victory){
     if(map != 0){
         delete map;
     }
-   // delete map;
-      // QMessageBox::information(this, "koniec", "before");
     map = new Map(this, columns, rows, victory);;
     map->move(20, 20);
     map->show();
@@ -95,11 +93,10 @@ void MainWindow::addPlayer(short colorId, const QString &name, int minutes, int 
     Player * player = new Player(colorId, name, minutes, seconds);
     map->board.addPlayer(player);
     player->showPanel(playersLayout, playersPanel);
+    connect(playersPanel, SIGNAL(destroyed()), player, SLOT(disableDeletingQWidgets()));
 }
 
 void MainWindow::createNewGame(int rows, int columns, int victory){
-     map->board.deletePlayers();
-     QMessageBox::information(this, "koniec", "del");
      drawMap(rows, columns, victory);
 }
 

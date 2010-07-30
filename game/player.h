@@ -5,12 +5,12 @@
 #include <QLabel>
 #include <QBasicTimer>
 
-class Player : QObject{
+class Player : public QObject{
     Q_OBJECT
     QTime * elapsed;
     int timeLeft, displayedTime;
     const int initialTime; //initialTime useful when restarting game
-    QLabel * nameLabel;
+    QLabel * nameLabel; //important! nameLabel and time label must not be deleted in destructor cause they're QWidgets with parent
     QLabel * timeLabel;
     QBasicTimer timer;
     bool active; //if it's true then player still plays, otherwise he's already lost
@@ -22,10 +22,7 @@ public:
     Player * next;
 
     Player(short color, const QString & name, int minutes, int seconds);
-    ~Player(){
-        delete nameLabel;
-        delete timeLabel;
-    }
+    ~Player();
 
     //return value in range 0 to 59
     int minutes(){
@@ -56,12 +53,7 @@ public:
         timer.start(1000, this);
     }
 
-    void stop(){
-        timer.stop();
-        timeLeft -= elapsed->elapsed();
-        displayedTime = timeLeft;
-        update();
-    }
+    void stop();
 
     void showPanel(QLayout * layout, QWidget * parent);
 
@@ -75,6 +67,14 @@ public:
 
     bool isActive(){
         return active;
+    }
+
+    Player * getNextActive();
+public slots:
+    //it's called by parent of nameLabel and timeLabel
+    void disableDeletingQWidgets(){
+        nameLabel = 0; //set to 0 to distinguish that has been deleted
+        timeLabel = 0; //set to 0 to distinguish that has been deleted
     }
 
 protected:
