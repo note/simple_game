@@ -11,8 +11,9 @@ class Player : public QObject{
     QTime * elapsed;
     int timeLeft, displayedTime;
     const int initialTime; //initialTime useful when restarting game
-    QLabel * nameLabel; //important! nameLabel and time label must not be deleted in destructor cause they're QWidgets with parent
+    QLabel * nameLabel; //important! nameLabel, timeLabel, spacer must not be deleted in destructor cause they're QWidgets with parent
     QLabel * timeLabel;
+    QSpacerItem * spacer;
     QBasicTimer timer;
     bool active; //if it's true then player still plays, otherwise he's already lost
     Board * board;
@@ -51,13 +52,14 @@ public:
     QString getSeconds(int time);
 
     void start(){
+        nameLabel->setText(name + " <<");
         elapsed->start();
         timer.start(1000, this);
     }
 
     void stop();
 
-    void showPanel(QLayout * layout, QWidget * parent);
+    void showPanel(QVBoxLayout * layout, QWidget * parent);
 
     void update();
     void update(int time);
@@ -81,6 +83,7 @@ public slots:
     void disableDeletingQWidgets(){
         nameLabel = 0; //set to 0 to distinguish that has been deleted
         timeLabel = 0; //set to 0 to distinguish that has been deleted
+        spacer = 0;
     }
 
 protected:

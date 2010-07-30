@@ -4,25 +4,24 @@
 #include <QPainter>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    map = new Map(this, 7, 7, 4);
-    map->move(20, 20);
+    map = 0;
+    playersPanel = 0;
     newGamePanel = new NewGamePanel(this);
     createMenus();
     addEvents();
     createNewGame(7, 7, 4);
-    playersPanel = new QWidget(this);
-    playersLayout = new QVBoxLayout();
-    playersPanel->move(500, 200);
-    playersPanel->setLayout(playersLayout);
     addPlayer(1, "Peter", 3, 20);
     addPlayer(2, "Eric", 3, 0);
-    showPlayersPanel();
+
+    showPlayersPanel(7);
+
     start();
 }
 
@@ -80,7 +79,7 @@ void MainWindow::drawMap(int rows, int columns, int victory){
         delete map;
     }
     map = new Map(this, columns, rows, victory);;
-    map->move(20, 20);
+    map->move(20, 35);
     map->show();
 }
 
@@ -98,14 +97,19 @@ void MainWindow::addPlayer(short colorId, const QString &name, int minutes, int 
 }
 
 void MainWindow::createNewGame(int rows, int columns, int victory){
-     drawMap(rows, columns, victory);
+    delete playersPanel;
+    playersPanel = new QWidget(this);
+    playersLayout = new QVBoxLayout();
+    playersPanel->setLayout(playersLayout);
+    drawMap(rows, columns, victory);
 }
 
 void MainWindow::start(){
     map->board.start();
 }
 
-void MainWindow::showPlayersPanel(){
-    playersPanel->resize(300, 300);
+void MainWindow::showPlayersPanel(int columns){
+    playersPanel->move((Application::squareSize+2*Application::padding)*columns+100, 50);
+    playersPanel->resize(playersLayout->closestAcceptableSize(playersPanel, QSize(100, 20)));
     playersPanel->show();
 }

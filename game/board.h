@@ -48,6 +48,7 @@ public:
 
     void deletePlayers();
     void setTurnOnNextActive();
+    bool isFull();
 };
 
 #endif // BOARD_H

@@ -42,22 +42,24 @@ void Map::paintEvent(QPaintEvent * event){
 }
 
 void Map::mousePressEvent(QMouseEvent *event){
-    int column = event->x() / (squareSize+2*padding);
-    try{
-        //make move
-        int row = board.getRowForColumn(column);
-        if(row>=0){ //otherwise row<0, then this column is full, nothing to do
-            board.playerStop();
-            board.move(row, column);
-            QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
-            action = 2;
-            repaint(rect); //important!! it can't be update cause update doesn't call paintEvent immediately
-            afterMove();
+    if(event->button()==Qt::LeftButton){
+        int column = event->x() / (squareSize+2*padding);
+        try{
+            //make move
+            int row = board.getRowForColumn(column);
+            if(row>=0){ //otherwise row<0, then this column is full, nothing to do
+                board.playerStop();
+                board.move(row, column);
+                QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
+                action = 2;
+                repaint(rect); //important!! it can't be update cause update doesn't call paintEvent immediately
+                afterMove();
+            }
+        }catch(IncorrectMove &e){
+            QMessageBox::information(this, "Error", "Icorrect move");
+        }catch(OutOfRange &e){
+            QMessageBox::information(this, "Error", "Out of range error.");
         }
-    }catch(IncorrectMove &e){
-        QMessageBox::information(this, "Error", "Icorrect move");
-    }catch(OutOfRange &e){
-        QMessageBox::information(this, "Error", "Out of range error.");
     }
 }
 
@@ -90,17 +92,21 @@ Player * Map::whoseMove(){
 
 void Map::afterMove(){
     board.setTurnOnNextActive();
-    if(board.winner()){
+    if(board.winner() || board.isFull()){
         endOfGame();
     }else
         board.playerStart();
 }
 
 void Map::endOfGame(){
-    QString s = board.winner()->name;
+    QString message;
+    if(board.winner())
+        message = "Player " + board.winner()->name + " has won!";
+    else
+        message = "You all are winners!";
 
     //MessageBox::information forces some updates, that strange repetition makes it all works
     action = 1;
-    QMessageBox::information(this, "End of game", "Player " + s + " has won!");
-    action = 1;
+    QMessageBox::information(this, "End of game", message);
+    action=1;
 }

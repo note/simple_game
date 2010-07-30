@@ -165,3 +165,10 @@ void Board::setTurnOnNextActive(){
 
     player = next;
 }
+
+bool Board::isFull(){
+    for(int i=0; i<columns; i++)
+        if((*this)[0][i] == 0) //there's at least one empty field
+            return false;
+    return true;
+}

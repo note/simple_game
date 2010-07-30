@@ -10,17 +10,14 @@ Player::Player(short color, const QString & name, int minutes, int seconds) : in
     elapsed = new QTime(0, 0, 0, 0);
     next = 0;
     active = true;
+    spacer = 0;
 }
 
 Player::~Player(){
-    if(nameLabel) //else deleting was disable (cause it has been deleted before by parent widget)
-        delete nameLabel;
-    if(timeLabel) //else deleting was disable (cause it has been deleted before by parent widget)
-        delete timeLabel;
     delete elapsed;
 }
 
-void Player::showPanel(QLayout * layout, QWidget * parent){
+void Player::showPanel(QVBoxLayout * layout, QWidget * parent){
     //setting nameLabel
     //this->layout = layout;
     nameLabel = new QLabel(name, parent);
@@ -32,6 +29,9 @@ void Player::showPanel(QLayout * layout, QWidget * parent){
     //setting timeLabel
     timeLabel = new QLabel(getMinutes() + ":" + getSeconds(), parent);
     layout->addWidget(timeLabel);
+
+    spacer = new QSpacerItem(1, 15);
+    layout->addSpacerItem(spacer);
 }
 
 QString Player::getMinutes(){
@@ -80,6 +80,7 @@ void Player::stop(){
     timer.stop();
     timeLeft -= elapsed->elapsed();
     displayedTime = timeLeft;
+    nameLabel->setText(name);
     update();
 }
 

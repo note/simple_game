@@ -19,8 +19,9 @@ public:
 private:
     Ui::NewGamePanel *ui;
     void setEnabledRow(bool enabled, int row);
-    bool handleForm();
+    std::vector<QString> handleForm();
     void createNewGame();
+    void printErrors(std::vector<QString> errors);
 
     QSignalMapper * signalMapper;
 
