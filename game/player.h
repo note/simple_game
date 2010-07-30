@@ -4,6 +4,7 @@
 #include <QLayout>
 #include <QLabel>
 #include <QBasicTimer>
+class Board;
 
 class Player : public QObject{
     Q_OBJECT
@@ -14,6 +15,7 @@ class Player : public QObject{
     QLabel * timeLabel;
     QBasicTimer timer;
     bool active; //if it's true then player still plays, otherwise he's already lost
+    Board * board;
 
 public:
     //This class is very simple and I predict that no extra actions would be performed in accessors so it's more convenient to make all those properties public
@@ -69,6 +71,10 @@ public:
         return active;
     }
 
+    void setBoard(Board * b){
+        board = b;
+    }
+
     Player * getNextActive();
 public slots:
     //it's called by parent of nameLabel and timeLabel
@@ -82,6 +88,9 @@ protected:
         displayedTime -= 1000;
         update();
     }
+signals:
+    void outOfTime();
+
 };
 
 #endif // PLAYER_H

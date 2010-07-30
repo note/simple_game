@@ -104,7 +104,6 @@ void Board::reset(){
     for(int i=0; i<rows; i++)
         for(int j=0; j<columns; j++)
             (*this)[i][j] = 0; //0 means that no piece occupy that field, 1 means that piece of player #1 occupy that field, 2...
-   // start();
     Player * tmp = headPlayer;
     if(tmp){
         do{
@@ -125,6 +124,7 @@ void Board::addPlayer(Player *player){
         tmp->next = player;
         player->next = headPlayer;
     }
+    player->setBoard(this);
 }
 
 void Board::playerStop(){

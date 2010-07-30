@@ -27,7 +27,13 @@ public:
 
     int getRowForColumn(int column);
 
-    Player * winner() const{
+    Player * winner(){
+        if(_winner)
+            return _winner;
+        Player * p1 = player->getNextActive();
+        Player * p2 = p1->getNextActive();
+        if(p1 == p2)
+            _winner = p1;
         return _winner;
     }
 

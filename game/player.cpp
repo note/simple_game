@@ -1,4 +1,4 @@
-#include "player.h"
+#include "board.h"
 #include <QMessageBox>
 #include "exceptions.h"
 
@@ -56,14 +56,24 @@ QString Player::getSeconds(int time){
 }
 
 void Player::update(){
-    update(displayedTime);
+    if(active)
+        update(displayedTime);
 }
 
 void Player::update(int time){
     if(time>0)
         timeLabel->setText(getMinutes(time) + ":" + getSeconds(time));
-    else
-        QMessageBox::information(timeLabel, "koniec", "koniec");
+    else{ //run out of time
+        active = false; //loses
+        stop();
+        timeLabel->setText("0:00");
+        timeLabel->setEnabled(false);
+        nameLabel->setEnabled(false);
+
+        //board->setTurnOnNextActive();
+        emit outOfTime();
+        //board->playerStart();
+    }
 }
 
 void Player::stop(){
@@ -75,8 +85,11 @@ void Player::stop(){
 
 void Player::restart(){
     stop();
+    active = true;
     timeLeft = initialTime;
     displayedTime = initialTime;
+    timeLabel->setEnabled(true); //it can be disabled if this player lost in last game
+    nameLabel->setEnabled(true); //it can be disabled if this player lost in last game
     update(initialTime);
 }
 

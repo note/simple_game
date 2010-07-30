@@ -52,16 +52,7 @@ void Map::mousePressEvent(QMouseEvent *event){
             QRect rect(QRect(column*(squareSize+2*padding)+padding, row*(squareSize+2*padding)+padding, squareSize, squareSize));
             action = 2;
             repaint(rect); //important!! it can't be update cause update doesn't call paintEvent immediately
-            board.setTurnOnNextActive();
-            if(board.winner()){ //if game has ended
-                QString s = board.winner()->name;
-
-                //MessageBox::information forces some updates, that strange repetition makes it all works
-                action = 1;
-                QMessageBox::information(this, "End of game", "Player number " + s + " has won!");
-                action = 1;
-            }else
-                board.playerStart();
+            afterMove();
         }
     }catch(IncorrectMove &e){
         QMessageBox::information(this, "Error", "Icorrect move");
@@ -95,4 +86,21 @@ void Map::restart(){
 
 Player * Map::whoseMove(){
     return board.player;
+}
+
+void Map::afterMove(){
+    board.setTurnOnNextActive();
+    if(board.winner()){
+        endOfGame();
+    }else
+        board.playerStart();
+}
+
+void Map::endOfGame(){
+    QString s = board.winner()->name;
+
+    //MessageBox::information forces some updates, that strange repetition makes it all works
+    action = 1;
+    QMessageBox::information(this, "End of game", "Player " + s + " has won!");
+    action = 1;
 }

@@ -94,6 +94,7 @@ void MainWindow::addPlayer(short colorId, const QString &name, int minutes, int 
     map->board.addPlayer(player);
     player->showPanel(playersLayout, playersPanel);
     connect(playersPanel, SIGNAL(destroyed()), player, SLOT(disableDeletingQWidgets()));
+    connect(player, SIGNAL(outOfTime()), map, SLOT(afterMove()));
 }
 
 void MainWindow::createNewGame(int rows, int columns, int victory){
