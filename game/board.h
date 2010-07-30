@@ -27,28 +27,30 @@ public:
 
     int getRowForColumn(int column);
 
-    Player * winner(){
-        if(_winner)
-            return _winner;
-        Player * p1 = player->getNextActive();
-        Player * p2 = p1->getNextActive();
-        if(p1 == p2)
-            _winner = p1;
-        return _winner;
-    }
+    //returns pointer to Player that won or null pointer if there's no winner
+    Player * winner();
 
+    //stops timer for player on turn
     void playerStop();
 
+    //starts timer for player on turn
     void playerStart();
+
+    //starts game
     void start();
 
     void addPlayer(Player * player);
 
+    //reset game and players
     void reset();
 
     void deletePlayers();
+
+    //set turn on next active player (active player is player who does not lost
     void setTurnOnNextActive();
-    bool isFull();
+
+    //if board is full (no move possible) return true
+    bool isFull() const;
 };
 
 #endif // BOARD_H

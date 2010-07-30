@@ -16,7 +16,8 @@ HEADERS += mainwindow.h \
     exceptions.h \
     newgame.h \
     player.h \
-    application.h
+    application.h \
+    client.h
 FORMS += mainwindow.ui \
     newgame.ui
 OTHER_FILES += 
